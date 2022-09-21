@@ -1,4 +1,4 @@
-package com.ramalwi.plants
+package com.ramalwi.plants.models
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

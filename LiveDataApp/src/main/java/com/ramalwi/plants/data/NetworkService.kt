@@ -1,7 +1,7 @@
 package com.ramalwi.plants.data
 
-import com.ramalwi.plants.GrowZone
-import com.ramalwi.plants.Plant
+import com.ramalwi.plants.models.GrowZone
+import com.ramalwi.plants.models.Plant
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient

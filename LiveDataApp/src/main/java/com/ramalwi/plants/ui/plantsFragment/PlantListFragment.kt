@@ -1,4 +1,4 @@
-package com.ramalwi.plants
+package com.ramalwi.plants.ui.plantsFragment
 
 import android.os.Bundle
 import android.view.LayoutInflater

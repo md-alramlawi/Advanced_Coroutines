@@ -5,8 +5,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.liveData
 import androidx.lifecycle.map
 import androidx.lifecycle.switchMap
-import com.ramalwi.plants.GrowZone
-import com.ramalwi.plants.Plant
+import com.ramalwi.plants.models.GrowZone
+import com.ramalwi.plants.models.Plant
 import com.ramalwi.plants.util.CacheOnSuccess
 import com.ramalwi.plants.util.ComparablePair
 import kotlinx.coroutines.CoroutineDispatcher

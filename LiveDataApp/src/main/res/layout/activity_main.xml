@@ -7,7 +7,7 @@
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/main_fragment"
-        android:name="com.ramalwi.plants.PlantListFragment"
+        android:name="com.ramalwi.plants.ui.plantsFragment.PlantListFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

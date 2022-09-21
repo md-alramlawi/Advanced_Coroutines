@@ -1,4 +1,4 @@
-package com.ramalwi.plants
+package com.ramalwi.plants.ui
 
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter

@@ -1,11 +1,11 @@
-
-package com.ramalwi.plants
+package com.ramalwi.plants.ui
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.ramalwi.plants.models.Plant
 import com.ramalwi.plants.databinding.ListItemPlantBinding
 
 /**
@@ -21,10 +21,13 @@ class PlantAdapter : ListAdapter<Plant, RecyclerView.ViewHolder>(PlantDiffCallba
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return PlantViewHolder(
             ListItemPlantBinding.inflate(
-            LayoutInflater.from(parent.context), parent, false))
+                LayoutInflater.from(parent.context), parent, false
+            )
+        )
     }
 
-    internal class PlantViewHolder(private val binding: ListItemPlantBinding) : RecyclerView.ViewHolder(binding.root) {
+    internal class PlantViewHolder(private val binding: ListItemPlantBinding) :
+        RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: Plant) {
             binding.apply {
