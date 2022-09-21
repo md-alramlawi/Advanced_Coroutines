@@ -8,9 +8,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.ramalwi.plants.models.Plant
 import com.ramalwi.plants.databinding.ListItemPlantBinding
 
-/**
- * Adapter for the [RecyclerView] in [PlantListFragment].
- */
 class PlantAdapter : ListAdapter<Plant, RecyclerView.ViewHolder>(PlantDiffCallback()) {
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {

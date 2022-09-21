@@ -11,10 +11,6 @@ import android.annotation.SuppressLint
 import android.graphics.Path
 import android.graphics.RectF
 
-/**
- * A Card view that clips the content of any shape, this should be done upstream in card,
- * working around it for now.
- */
 class MaskedCardView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,

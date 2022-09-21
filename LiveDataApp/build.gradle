@@ -29,16 +29,10 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
-    dataBinding {
-        enabled = true
-    }
 }
 
 dependencies {
     implementation libraries
     implementation arch_libraries
     kapt librariesKapt
-
-    testImplementation testLibraries
-    androidTestImplementation androidTestLibraries
 }

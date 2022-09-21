@@ -7,9 +7,6 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.ramalwi.plants.models.Plant
 
-/**
- * The Data Access Object for the Plant class.
- */
 @Dao
 interface PlantDao {
     @Query("SELECT * FROM plants ORDER BY name")
