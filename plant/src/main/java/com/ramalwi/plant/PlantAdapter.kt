@@ -1,12 +1,12 @@
-package com.ramalwi.plants.ui
+package com.ramalwi.plant
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.ramalwi.plants.models.Plant
-import com.ramalwi.plants.databinding.ListItemPlantBinding
+import com.ramalwi.plant.databinding.ListItemPlantBinding
+import com.ramalwi.plant.models.Plant
 
 class PlantAdapter : ListAdapter<Plant, RecyclerView.ViewHolder>(PlantDiffCallback()) {
 

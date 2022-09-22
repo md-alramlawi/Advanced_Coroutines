@@ -5,9 +5,8 @@ import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.google.android.material.snackbar.Snackbar
-import com.ramalwi.plants.R
-import com.ramalwi.plants.databinding.FragmentPlantListBinding
-import com.ramalwi.plants.ui.PlantAdapter
+import com.ramalwi.live_data.R
+import com.ramalwi.live_data.databinding.FragmentPlantListBinding
 import com.ramalwi.plants.ui.plantsFragment.DefaultViewModelProvider.providePlantListViewModelFactory
 
 class PlantListFragment : Fragment() {
@@ -35,7 +34,7 @@ class PlantListFragment : Fragment() {
             }
         }
 
-        val adapter = PlantAdapter()
+        val adapter = com.ramalwi.plant.PlantAdapter()
         binding.plantList.adapter = adapter
         subscribeUi(adapter)
 
@@ -57,7 +56,7 @@ class PlantListFragment : Fragment() {
         }
     }
 
-    private fun subscribeUi(adapter: PlantAdapter) {
+    private fun subscribeUi(adapter: com.ramalwi.plant.PlantAdapter) {
         viewModel.plants.observe(viewLifecycleOwner) { plants ->
             adapter.submitList(plants)
         }

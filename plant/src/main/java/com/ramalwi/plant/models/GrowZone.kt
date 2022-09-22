@@ -1,4 +1,4 @@
-package com.ramalwi.plants.models
+package com.ramalwi.plant.models
 
 @JvmInline
 value class GrowZone(val number: Int){

@@ -1,2 +1,3 @@
 rootProject.name = "Advanced Coroutines"
 include ':LiveDataApp'
+include ':plant'

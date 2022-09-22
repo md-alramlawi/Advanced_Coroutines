@@ -1,4 +1,4 @@
-package com.ramalwi.plants.util
+package com.ramalwi.plant.util
 
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Deferred

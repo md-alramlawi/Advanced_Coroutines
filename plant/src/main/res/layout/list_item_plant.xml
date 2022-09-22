@@ -8,10 +8,10 @@
 
         <variable
             name="plant"
-            type="com.ramalwi.plants.models.Plant" />
+            type="com.ramalwi.plant.models.Plant" />
     </data>
 
-    <com.ramalwi.plants.ui.MaskedCardView
+    <com.ramalwi.plant.MaskedCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/card_side_margin"
@@ -53,6 +53,6 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </com.ramalwi.plants.ui.MaskedCardView>
+    </com.ramalwi.plant.MaskedCardView>
 
 </layout>

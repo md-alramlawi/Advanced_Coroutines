@@ -1,4 +1,4 @@
-package com.ramalwi.plants.util
+package com.ramalwi.plant.util
 
 data class ComparablePair<A : Comparable<A>, B : Comparable<B>>(
     val first: A,

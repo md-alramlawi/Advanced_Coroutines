@@ -5,10 +5,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.liveData
 import androidx.lifecycle.map
 import androidx.lifecycle.switchMap
-import com.ramalwi.plants.models.GrowZone
-import com.ramalwi.plants.models.Plant
-import com.ramalwi.plants.util.CacheOnSuccess
-import com.ramalwi.plants.util.ComparablePair
+import com.ramalwi.plant.util.CacheOnSuccess
+import com.ramalwi.plant.models.GrowZone
+import com.ramalwi.plant.models.Plant
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -71,7 +70,7 @@ class PlantRepository private constructor(
                 if (order > -1) order
                 else Int.MAX_VALUE
             }
-            ComparablePair(positionForItem, plant.name)
+            com.ramalwi.plant.util.ComparablePair(positionForItem, plant.name)
         }
     }
 

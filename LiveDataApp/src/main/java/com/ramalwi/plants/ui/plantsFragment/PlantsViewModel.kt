@@ -6,9 +6,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.switchMap
 import androidx.lifecycle.viewModelScope
 import com.ramalwi.plants.data.PlantRepository
-import com.ramalwi.plants.models.GrowZone
-import com.ramalwi.plants.models.GrowZone.Companion.NoGrowZone
-import com.ramalwi.plants.models.Plant
+import com.ramalwi.plant.models.GrowZone
+import com.ramalwi.plant.models.GrowZone.Companion.NoGrowZone
+import com.ramalwi.plant.models.Plant
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 

@@ -1,4 +1,4 @@
-package com.ramalwi.plants.ui
+package com.ramalwi.plant
 
 import android.content.Context
 import android.graphics.Canvas

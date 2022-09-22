@@ -5,7 +5,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.ramalwi.plants.models.Plant
+import com.ramalwi.plant.models.Plant
 
 @Dao
 interface PlantDao {
