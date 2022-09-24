@@ -5,8 +5,10 @@ import com.ramalwi.flowapp.data.PlantRepository
 import com.ramalwi.plant.models.GrowZone
 import com.ramalwi.plant.models.GrowZone.Companion.NoGrowZone
 import com.ramalwi.plant.models.Plant
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.*
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class PlantsViewModel internal constructor(
     private val plantRepository: PlantRepository
 ) : ViewModel() {
@@ -43,7 +45,10 @@ class PlantsViewModel internal constructor(
             }
         }
             .onEach {  _spinner.value = false }
-            .catch { throwable ->  _snackbar.value = throwable.message  }
+            .catch { throwable ->
+                _snackbar.value = throwable.message
+                _spinner.value = false
+            }
             .launchIn(viewModelScope)
     }
 
