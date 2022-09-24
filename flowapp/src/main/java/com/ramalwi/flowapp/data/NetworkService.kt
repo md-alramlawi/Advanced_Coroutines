@@ -8,34 +8,40 @@ import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
+import java.util.concurrent.TimeUnit
 
 class NetworkService {
 
     private val retrofit = Retrofit.Builder()
         .baseUrl("https://raw.githubusercontent.com/")
-        .client(OkHttpClient())
+        .client(
+            OkHttpClient()
+            .newBuilder()
+            .callTimeout(10, TimeUnit.SECONDS)
+            .build()
+        )
         .addConverterFactory(GsonConverterFactory.create())
         .build()
 
-    private val sunflowerService = retrofit.create(SunflowerService::class.java)
+    private val api = retrofit.create(ApiService::class.java)
 
     suspend fun allPlants(): List<Plant> = withContext(Dispatchers.Default) {
-        val result = sunflowerService.getAllPlants()
+        val result = api.getAllPlants()
         result.shuffled()
     }
 
     suspend fun plantsByGrowZone(growZone: GrowZone) = withContext(Dispatchers.Default) {
-        val result = sunflowerService.getAllPlants()
-        result.filter { it.growZoneNumber == growZone.number }.shuffled()
+        val result = api.getAllPlants()
+        result.filter { it.equals(growZone)}.shuffled()
     }
 
     suspend fun customPlantSortOrder(): List<String> = withContext(Dispatchers.Default) {
-        val result = sunflowerService.getCustomPlantSortOrder()
+        val result = api.getCustomPlantSortOrder()
         result.map { plant -> plant.plantId }
     }
 }
 
-interface SunflowerService {
+interface ApiService {
     @GET("googlecodelabs/kotlin-coroutines/master/advanced-coroutines-codelab/sunflower/src/main/assets/plants.json")
     suspend fun getAllPlants(): List<Plant>
 
