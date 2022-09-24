@@ -5,8 +5,7 @@ import com.ramalwi.flowapp.data.PlantRepository
 import com.ramalwi.plant.models.GrowZone
 import com.ramalwi.plant.models.GrowZone.Companion.NoGrowZone
 import com.ramalwi.plant.models.Plant
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.*
 
 class PlantsViewModel internal constructor(
     private val plantRepository: PlantRepository
@@ -20,43 +19,45 @@ class PlantsViewModel internal constructor(
     val spinner: LiveData<Boolean>
         get() = _spinner
 
+    private val growZoneFlow = MutableStateFlow<GrowZone>(NoGrowZone)
 
-    private val growZone = MutableLiveData<GrowZone>(NoGrowZone)
+    /**[flatMapLatest] is switching between two data sources based on an event.*/
+    val plantsUsingFlow: LiveData<List<Plant>> = growZoneFlow.flatMapLatest { growZone ->
+        if (growZone == NoGrowZone) {
+            plantRepository.plantsFlow
+        } else {
+            plantRepository.getPlantsWithGrowZoneFlow(growZone)
+        }
+    }.asLiveData()
 
-    val plantsUsingFlow: LiveData<List<Plant>> = plantRepository.plantsFlow.asLiveData()
 
     init {
         clearGrowZoneNumber()
 
-        launchDataLoad { plantRepository.tryUpdateRecentPlantsCache() }
+        growZoneFlow.mapLatest { growZone ->
+            _spinner.value = true
+            if (growZone == NoGrowZone) {
+                plantRepository.tryUpdateRecentPlantsCache()
+            } else {
+                plantRepository.tryUpdateRecentPlantsForGrowZoneCache(growZone)
+            }
+        }
+            .onEach {  _spinner.value = false }
+            .catch { throwable ->  _snackbar.value = throwable.message  }
+            .launchIn(viewModelScope)
     }
 
     fun setGrowZoneNumber(num: Int) {
-        growZone.value = GrowZone(num)
-        launchDataLoad { plantRepository.tryUpdateRecentPlantsCache() }
+        growZoneFlow.value = GrowZone(num)
     }
 
     fun clearGrowZoneNumber() {
-        growZone.value = NoGrowZone
-        launchDataLoad { plantRepository.tryUpdateRecentPlantsCache() }
+        growZoneFlow.value = NoGrowZone
     }
 
-    fun isFiltered() = growZone.value != NoGrowZone
+    fun isFiltered() = growZoneFlow.value != NoGrowZone
 
     fun onSnackbarShown() {
         _snackbar.value = null
-    }
-
-    private fun launchDataLoad(block: suspend () -> Unit): Job {
-        return viewModelScope.launch {
-            try {
-                _spinner.value = true
-                block()
-            } catch (error: Throwable) {
-                _snackbar.value = error.message
-            } finally {
-                _spinner.value = false
-            }
-        }
     }
 }
