@@ -1,29 +1,70 @@
 package com.ramalwi.flowapp.data
 
 import androidx.annotation.AnyThread
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.liveData
-import androidx.lifecycle.map
-import androidx.lifecycle.switchMap
-import com.ramalwi.plant.util.CacheOnSuccess
 import com.ramalwi.plant.models.GrowZone
 import com.ramalwi.plant.models.Plant
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.withContext
+import com.ramalwi.plant.util.CacheOnSuccess
+import com.ramalwi.plant.util.ComparablePair
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
 
 class PlantRepository private constructor(
     private val plantDao: PlantDao,
     private val plantService: NetworkService,
     private val defaultDispatcher: CoroutineDispatcher = Dispatchers.Default
 ) {
-    val plantsFlow: Flow<List<Plant>>
-        get() = plantDao.getPlantsFlow()
 
-    fun getPlantsWithGrowZoneFlow(growZoneNumber: GrowZone): Flow<List<Plant>> {
-        return plantDao.getPlantsWithGrowZoneNumberFlow(growZoneNumber.number)
+    @OptIn(FlowPreview::class)
+    val plantsFlow: Flow<List<Plant>>
+        get() = combine<List<Plant>, List<String>, List<Plant>>(
+            flow = plantDao.getPlantsFlow(),
+            flow2 = plantsListSortOrderCache::getOrAwait
+                .asFlow()
+                .onStart {
+                    emit(emptyList())
+                    delay(1500)
+                },
+            transform = { plants, sortOrder ->
+                plants.applySort(sortOrder)
+            }
+        ).flowOn(defaultDispatcher)
+
+    fun getPlantsWithGrowZoneFlow0(growZone: GrowZone): Flow<List<Plant>> {
+        return plantDao.getPlantsWithGrowZoneNumberFlow(growZone.number)
+            .map { plantList ->
+                val sortOrderFromNetwork = plantsListSortOrderCache.getOrAwait()
+                val nextValue = plantList.applyMainSafeSort(sortOrderFromNetwork)
+                nextValue
+            }
     }
+
+
+    fun getPlantsWithGrowZoneFlow1(growZone: GrowZone): Flow<List<Plant>> {
+        return plantDao.getPlantsWithGrowZoneNumberFlow(growZone.number)
+            .map { plantList ->
+                val sortOrderFromNetwork = plantsListSortOrderCache.getOrAwait()
+                val nextValue = plantList.applyMainSafeSort(sortOrderFromNetwork)
+                nextValue
+            }
+    }
+
+    fun getPlantsWithGrowZoneFlow(growZone: GrowZone): Flow<List<Plant>> {
+        return combine(
+            flow = plantDao.getPlantsWithGrowZoneNumberFlow(growZone.number),
+            flow2 = plantsListSortOrderCache::getOrAwait.asFlow(),
+            transform = { plants, sortOrder ->
+                plants.applySort(sortOrder)
+            }
+        ).flowOn(defaultDispatcher)
+    }
+
+    private var plantsListSortOrderCache =
+        CacheOnSuccess(
+            onErrorFallback = { listOf() },
+            block = {
+                plantService.customPlantSortOrder()
+            }
+        )
 
     private fun shouldUpdatePlantsCache(): Boolean {
         return true
@@ -31,6 +72,10 @@ class PlantRepository private constructor(
 
     suspend fun tryUpdateRecentPlantsCache() {
         if (shouldUpdatePlantsCache()) fetchRecentPlants()
+    }
+
+    suspend fun tryUpdateRecentPlantsForGrowZoneCache(growZone: GrowZone) {
+        if (shouldUpdatePlantsCache()) fetchPlantsForGrowZone(growZone)
     }
 
     private suspend fun fetchRecentPlants() {
@@ -43,14 +88,6 @@ class PlantRepository private constructor(
         plantDao.insertAll(plants)
     }
 
-    private var plantsListSortOrderCache =
-        CacheOnSuccess(
-            onErrorFallback = { listOf() },
-            block = {
-                plantService.customPlantSortOrder()
-            }
-        )
-
     private fun List<Plant>.applySort(customSortOrder: List<String>): List<Plant> {
 
         return this.sortedBy { plant ->
@@ -58,7 +95,7 @@ class PlantRepository private constructor(
                 if (order > -1) order
                 else Int.MAX_VALUE
             }
-            com.ramalwi.plant.util.ComparablePair(positionForItem, plant.name)
+            ComparablePair(positionForItem, plant.name)
         }
     }
 
