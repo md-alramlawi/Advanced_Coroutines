@@ -8,6 +8,7 @@ import androidx.lifecycle.switchMap
 import com.ramalwi.plant.util.CacheOnSuccess
 import com.ramalwi.plant.models.GrowZone
 import com.ramalwi.plant.models.Plant
+import com.ramalwi.plant.util.ComparablePair
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -50,11 +51,6 @@ class PlantRepository private constructor(
         plantDao.insertAll(plants)
     }
 
-    private suspend fun fetchPlantsForGrowZone(growZone: GrowZone) {
-        val plants = plantService.plantsByGrowZone(growZone)
-        plantDao.insertAll(plants)
-    }
-
     private var plantsListSortOrderCache =
         CacheOnSuccess(
             onErrorFallback = { listOf() },
@@ -70,7 +66,7 @@ class PlantRepository private constructor(
                 if (order > -1) order
                 else Int.MAX_VALUE
             }
-            com.ramalwi.plant.util.ComparablePair(positionForItem, plant.name)
+            ComparablePair(positionForItem, plant.name)
         }
     }
 
