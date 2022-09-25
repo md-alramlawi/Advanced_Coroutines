@@ -1,15 +1,17 @@
-apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-kapt'
+plugins {
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+    id 'kotlin-kapt'
+}
 
 android {
-    namespace 'com.ramalwi.live_data'
+    namespace 'com.ramalwi.flowapp'
     compileSdkVersion compile_sdk_version
     dataBinding {
         enabled = true
     }
     defaultConfig {
-        applicationId "com.ramalwi.live_data"
+        applicationId "com.ramalwi.flowapp"
         minSdkVersion min_sdk_version
         targetSdkVersion compile_sdk_version
         versionCode 1

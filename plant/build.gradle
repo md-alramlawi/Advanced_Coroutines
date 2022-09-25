@@ -1,38 +1,29 @@
-apply plugin: 'com.android.application'
+apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 
 android {
-    namespace 'com.ramalwi.live_data'
+    namespace 'com.ramalwi.plant'
     compileSdkVersion compile_sdk_version
     dataBinding {
         enabled = true
     }
     defaultConfig {
-        applicationId "com.ramalwi.live_data"
         minSdkVersion min_sdk_version
         targetSdkVersion compile_sdk_version
-        versionCode 1
-        versionName "1.0"
+
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
         release {
-            minifyEnabled true
+            minifyEnabled false
         }
     }
-    compileOptions {
-        sourceCompatibility = 1.8
-        targetCompatibility = 1.8
-    }
-    kotlinOptions {
-        jvmTarget = "1.8"
-    }
+
 }
 
 dependencies {
-    implementation project(path: ':plant')
     implementation libraries
     implementation arch_libraries
     kapt librariesKapt
